@@ -1,0 +1,368 @@
+version: 2
+
+models:
+
+  # ─── LOOKUP / REFERENCE TABLES ──────────────────────────────────────────────
+
+  - name: stg_publishers
+    description: "Cleaned and standardized publisher records. One row per game publisher."
+    columns:
+      - name: publisher_key
+        description: "Surrogate key — MD5 hash of publisher_id."
+        tests:
+          - unique
+          - not_null
+      - name: publisher_id
+        description: "Natural key from source system."
+        tests:
+          - unique
+          - not_null
+      - name: publisher_name
+        description: "Full publisher name."
+        tests:
+          - not_null
+
+  - name: stg_genres
+    description: "Cleaned genre records. One row per game genre."
+    columns:
+      - name: genre_key
+        description: "Surrogate key — MD5 hash of genre_id."
+        tests:
+          - unique
+          - not_null
+      - name: genre_id
+        description: "Natural key from source system."
+        tests:
+          - unique
+          - not_null
+      - name: genre_name
+        description: "Genre name (e.g. RPG, FPS, Strategy)."
+        tests:
+          - not_null
+
+  - name: stg_platforms
+    description: "Cleaned platform records. One row per gaming platform."
+    columns:
+      - name: platform_key
+        description: "Surrogate key — MD5 hash of platform_id."
+        tests:
+          - unique
+          - not_null
+      - name: platform_id
+        description: "Natural key from source system."
+        tests:
+          - unique
+          - not_null
+      - name: platform_name
+        description: "Platform name (e.g. PC, PlayStation, Xbox, Mobile)."
+        tests:
+          - not_null
+
+  - name: stg_regions
+    description: "Cleaned region records. One row per geographic region."
+    columns:
+      - name: region_key
+        description: "Surrogate key — MD5 hash of region_id."
+        tests:
+          - unique
+          - not_null
+      - name: region_id
+        description: "Natural key from source system."
+        tests:
+          - unique
+          - not_null
+      - name: region
+        description: "Region name (e.g. North America, Europe, Asia). Column is 'region' not 'region_name'."
+        tests:
+          - not_null
+      - name: country_name
+        description: "Country name within the region."
+        tests:
+          - not_null
+
+  - name: stg_currencies
+    description: "Cleaned currency records. One row per supported currency."
+    columns:
+      - name: currency_key
+        description: "Surrogate key — MD5 hash of currency_code."
+        tests:
+          - unique
+          - not_null
+      - name: currency_code
+        description: "ISO 4217 currency code (e.g. USD, EUR, GBP)."
+        tests:
+          - unique
+          - not_null
+
+  # ─── GAME CATALOGUE ─────────────────────────────────────────────────────────
+
+  - name: stg_games
+    description: "Cleaned game records. One row per game title."
+    columns:
+      - name: game_key
+        description: "Surrogate key — MD5 hash of game_id."
+        tests:
+          - unique
+          - not_null
+      - name: game_id
+        description: "Natural key from source system."
+        tests:
+          - unique
+          - not_null
+      - name: publisher_id
+        description: "FK to stg_publishers."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_publishers')
+                field: publisher_id
+      - name: genre_id
+        description: "FK to stg_genres."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_genres')
+                field: genre_id
+
+  - name: stg_devices
+    description: "Cleaned device records. One row per device type."
+    columns:
+      - name: device_key
+        description: "Surrogate key — MD5 hash of device_id."
+        tests:
+          - unique
+          - not_null
+      - name: device_id
+        description: "Natural key from source system."
+        tests:
+          - unique
+          - not_null
+      - name: platform_id
+        description: "FK to stg_platforms. Warn only — some devices may span platforms."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('stg_platforms')
+                field: platform_id
+              config:
+                severity: warn
+
+  - name: stg_achievements
+    description: "Cleaned achievement records. One row per achievement per game."
+    columns:
+      - name: achievement_key
+        description: "Surrogate key — MD5 hash of achievement_id."
+        tests:
+          - unique
+          - not_null
+      - name: achievement_id
+        description: "Natural key from source system."
+        tests:
+          - unique
+          - not_null
+      - name: game_id
+        description: "FK to stg_games."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_games')
+                field: game_id
+
+  - name: stg_seasons
+    description: "Cleaned season records. One row per season. Seasons are standalone — no game_id FK in raw data."
+    columns:
+      - name: season_key
+        description: "Surrogate key — MD5 hash of season_id."
+        tests:
+          - unique
+          - not_null
+      - name: season_id
+        description: "Natural key from source system."
+        tests:
+          - unique
+          - not_null
+      - name: season_name
+        description: "Display name for the season."
+        tests:
+          - not_null
+
+  # ─── PLAYERS ────────────────────────────────────────────────────────────────
+
+  - name: stg_players
+    description: "Cleaned player records. One row per registered player account."
+    columns:
+      - name: player_key
+        description: "Surrogate key — MD5 hash of player_id."
+        tests:
+          - unique
+          - not_null
+      - name: player_id
+        description: "Natural key from source system."
+        tests:
+          - unique
+          - not_null
+      - name: region_id
+        description: "FK to stg_regions."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_regions')
+                field: region_id
+      - name: username
+        description: "Player display name — must be unique across all accounts."
+        tests:
+          - not_null
+          - unique
+      - name: email
+        description: "Player email address. Warn on duplicates — test data may have duplicates."
+        tests:
+          - not_null
+          - unique:
+              config:
+                severity: warn
+      - name: account_tier
+        description: "Player subscription tier. Actual values are Title Case: VIP, Free, Premium, Basic."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['VIP', 'Free', 'Premium', 'Basic']
+      - name: is_active
+        description: "Whether the player account is currently active. BOOLEAN column — not_null is sufficient, accepted_values is redundant on BOOLEAN type."
+        tests:
+          - not_null
+
+  # ─── EVENTS / FACT TABLES ───────────────────────────────────────────────────
+
+  - name: stg_sessions
+    description: "Cleaned session records. One row per gameplay session."
+    columns:
+      - name: session_key
+        description: "Surrogate key — MD5 hash of session_id."
+        tests:
+          - unique
+          - not_null
+      - name: session_id
+        description: "Natural key from source system."
+        tests:
+          - unique
+          - not_null
+      - name: player_id
+        description: "FK to stg_players."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_players')
+                field: player_id
+      - name: game_id
+        description: "FK to stg_games."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_games')
+                field: game_id
+
+  - name: stg_purchases
+    description: "Cleaned purchase records. One row per in-game transaction."
+    columns:
+      - name: purchase_key
+        description: "Surrogate key — MD5 hash of purchase_id."
+        tests:
+          - unique
+          - not_null
+      - name: purchase_id
+        description: "Natural key from source system."
+        tests:
+          - unique
+          - not_null
+      - name: player_id
+        description: "FK to stg_players."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_players')
+                field: player_id
+
+  - name: stg_achievement_unlocks
+    description: "Cleaned achievement unlock records. One row per player per achievement earned."
+    columns:
+      - name: unlock_key
+        description: "Surrogate key — MD5 hash of player_id + achievement_id."
+        tests:
+          - unique
+          - not_null
+      - name: player_id
+        description: "FK to stg_players."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_players')
+                field: player_id
+      - name: achievement_id
+        description: "FK to stg_achievements."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_achievements')
+                field: achievement_id
+
+  - name: stg_matches
+    description: "Cleaned match records. One row per competitive match."
+    columns:
+      - name: match_key
+        description: "Surrogate key — MD5 hash of match_id."
+        tests:
+          - unique
+          - not_null
+      - name: match_id
+        description: "Natural key from source system."
+        tests:
+          - unique
+          - not_null
+      - name: game_id
+        description: "FK to stg_games."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_games')
+                field: game_id
+
+  - name: stg_game_events
+    description: "Cleaned game event records. One row per in-game event fired."
+    columns:
+      - name: event_key
+        description: "Surrogate key — MD5 hash of event_id."
+        tests:
+          - unique
+          - not_null
+      - name: event_id
+        description: "Natural key from source system."
+        tests:
+          - unique
+          - not_null
+      - name: player_id
+        description: "FK to stg_players."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_players')
+                field: player_id
+      - name: session_id
+        description: "FK to stg_sessions."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_sessions')
+                field: session_id
