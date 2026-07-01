@@ -1,0 +1,313 @@
+version: 2
+
+sources:
+  - name: raw_gaming
+    database: gaming-analytics-501111
+    schema: raw_gaming
+    description: "Raw gaming data — loaded via Python generator"
+    
+    tables:
+      - name: raw_achievement_unlocks
+        columns:
+          - name: unlock_id
+            data_type: int64
+          - name: player_id
+            data_type: int64
+          - name: achievement_id
+            data_type: int64
+          - name: unlocked_at
+            data_type: string
+          - name: time_to_unlock_hours
+            data_type: float64
+          - name: is_first_global_unlock
+            data_type: boolean
+          - name: created_at
+            data_type: string
+
+      - name: raw_achievements
+        columns:
+          - name: achievement_id
+            data_type: int64
+          - name: game_id
+            data_type: int64
+          - name: achievement_name
+            data_type: string
+          - name: achievement_type
+            data_type: string
+          - name: xp_reward
+            data_type: int64
+          - name: rarity
+            data_type: string
+          - name: unlock_rate_pct
+            data_type: float64
+          - name: created_at
+            data_type: string
+
+      - name: raw_currencies
+        columns:
+          - name: currency_id
+            data_type: int64
+          - name: currency_code
+            data_type: string
+          - name: currency_name
+            data_type: string
+          - name: symbol
+            data_type: string
+          - name: is_real_money
+            data_type: boolean
+          - name: created_at
+            data_type: string
+
+      - name: raw_devices
+        columns:
+          - name: device_id
+            data_type: int64
+          - name: device_name
+            data_type: string
+          - name: brand
+            data_type: string
+          - name: device_type
+            data_type: string
+          - name: operating_system
+            data_type: string
+          - name: created_at
+            data_type: string
+
+      - name: raw_game_events
+        columns:
+          - name: event_id
+            data_type: int64
+          - name: session_id
+            data_type: int64
+          - name: player_id
+            data_type: int64
+          - name: game_id
+            data_type: int64
+          - name: event_type
+            data_type: string
+          - name: event_value
+            data_type: float64
+          - name: xp_delta
+            data_type: int64
+          - name: coordinates_x
+            data_type: float64
+          - name: coordinates_y
+            data_type: float64
+          - name: occurred_at
+            data_type: string
+          - name: created_at
+            data_type: string
+
+      - name: raw_games
+        columns:
+          - name: game_id
+            data_type: int64
+          - name: game_name
+            data_type: string
+          - name: publisher_id
+            data_type: int64
+          - name: genre_id
+            data_type: int64
+          - name: release_date
+            data_type: string
+          - name: base_price_usd
+            data_type: float64
+          - name: is_free_to_play
+            data_type: boolean
+          - name: rating_esrb
+            data_type: string
+          - name: avg_review_score
+            data_type: float64
+          - name: total_reviews
+            data_type: int64
+          - name: created_at
+            data_type: string
+
+      - name: raw_genres
+        columns:
+          - name: genre_id
+            data_type: int64
+          - name: genre_name
+            data_type: string
+          - name: is_multiplayer_focused
+            data_type: boolean
+          - name: created_at
+            data_type: string
+
+      - name: raw_matches
+        columns:
+          - name: match_id
+            data_type: int64
+          - name: player_id
+            data_type: int64
+          - name: game_id
+            data_type: int64
+          - name: platform_id
+            data_type: int64
+          - name: match_mode
+            data_type: string
+          - name: result
+            data_type: string
+          - name: kills
+            data_type: int64
+          - name: deaths
+            data_type: int64
+          - name: assists
+            data_type: int64
+          - name: score
+            data_type: int64
+          - name: duration_minutes
+            data_type: int64
+          - name: xp_earned
+            data_type: int64
+          - name: match_start_at
+            data_type: string
+          - name: match_end_at
+            data_type: string
+          - name: created_at
+            data_type: string
+
+      - name: raw_platforms
+        columns:
+          - name: platform_id
+            data_type: int64
+          - name: platform_name
+            data_type: string
+          - name: platform_type
+            data_type: string
+          - name: manufacturer
+            data_type: string
+          - name: release_year
+            data_type: int64
+          - name: created_at
+            data_type: string
+
+      - name: raw_players
+        columns:
+          - name: player_id
+            data_type: int64
+          - name: username
+            data_type: string
+          - name: email
+            data_type: string
+          - name: region_id
+            data_type: int64
+          - name: account_tier
+            data_type: string
+          - name: age_group
+            data_type: string
+          - name: gender
+            data_type: string
+          - name: total_playtime_hours
+            data_type: float64
+          - name: lifetime_spend_usd
+            data_type: float64
+          - name: is_active
+            data_type: boolean
+          - name: account_created_at
+            data_type: string
+          - name: last_login_at
+            data_type: string
+
+      - name: raw_publishers
+        columns:
+          - name: publisher_id
+            data_type: int64
+          - name: publisher_name
+            data_type: string
+          - name: founded_year
+            data_type: int64
+          - name: country
+            data_type: string
+          - name: is_indie
+            data_type: boolean
+          - name: created_at
+            data_type: string
+
+      - name: raw_purchases
+        columns:
+          - name: purchase_id
+            data_type: int64
+          - name: player_id
+            data_type: int64
+          - name: game_id
+            data_type: int64
+          - name: purchase_type
+            data_type: string
+          - name: currency_id
+            data_type: int64
+          - name: amount
+            data_type: float64
+          - name: is_real_money
+            data_type: boolean
+          - name: is_refunded
+            data_type: boolean
+          - name: platform_fee_pct
+            data_type: float64
+          - name: purchased_at
+            data_type: string
+          - name: created_at
+            data_type: string
+
+      - name: raw_regions
+        columns:
+          - name: region_id
+            data_type: int64
+          - name: country_code
+            data_type: string
+          - name: country_name
+            data_type: string
+          - name: region
+            data_type: string
+          - name: timezone
+            data_type: string
+          - name: created_at
+            data_type: string
+
+      - name: raw_seasons
+        columns:
+          - name: season_id
+            data_type: int64
+          - name: season_name
+            data_type: string
+          - name: season_number
+            data_type: int64
+          - name: start_date
+            data_type: string
+          - name: end_date
+            data_type: string
+          - name: battle_pass_price_usd
+            data_type: float64
+          - name: created_at
+            data_type: string
+
+      - name: raw_sessions
+        columns:
+          - name: session_id
+            data_type: int64
+          - name: player_id
+            data_type: int64
+          - name: game_id
+            data_type: int64
+          - name: platform_id
+            data_type: int64
+          - name: device_id
+            data_type: int64
+          - name: session_start_at
+            data_type: string
+          - name: session_end_at
+            data_type: string
+          - name: duration_minutes
+            data_type: int64
+          - name: avg_fps
+            data_type: float64
+          - name: ping_ms
+            data_type: int64
+          - name: xp_earned
+            data_type: int64
+          - name: in_game_currency_earned
+            data_type: int64
+          - name: was_multiplayer
+            data_type: boolean
+          - name: created_at
+            data_type: string
