@@ -1,0 +1,23 @@
+analyses:
+  - name: player_revenue_cohort          # required
+    description: >
+      Monthly cohort analysis of player revenue grouped by account tier.
+      Compiled by dbt but never executed — no table created in BigQuery.
+      Use the compiled SQL (target/compiled/...) in BI tools or ad-hoc queries.
+    config:
+      tags: ['finance', 'cohort']        # under config: since dbt v1.10+
+    columns:
+      - name: purchase_month
+        description: First day of the calendar month (DATE_TRUNC month).
+      - name: account_tier
+        description: Player account tier from dim_players (Bronze/Silver/Gold/Platinum).
+      - name: active_players
+        description: Distinct count of players who made at least one purchase that month.
+      - name: total_purchases
+        description: Total number of purchase transactions in that month and tier.
+      - name: total_revenue
+        description: Sum of all purchase amounts (USD) in that month and tier.
+      - name: avg_purchase_value
+        description: Average purchase value (USD) in that month and tier.
+      - name: revenue_per_player
+        description: Total revenue divided by active players — revenue efficiency metric.

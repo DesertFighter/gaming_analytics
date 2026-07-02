@@ -1,0 +1,32 @@
+version: 2
+
+exposures:
+
+  - name: gaming_revenue_dashboard
+    type: dashboard
+    maturity: high
+    url: https://lookerstudio.google.com/gaming-revenue
+    description: >
+      Executive dashboard showing player revenue, purchase trends,
+      and spend tier distribution. Pulls from mart layer daily.
+    depends_on:
+      - ref('fct_purchases')
+      - ref('dim_players')
+      - ref('dim_games')
+    owner:
+      name: Fadi Abusafat
+      email: smartdataengineer2025@gmail.com
+
+  - name: player_behaviour_analysis
+    type: analysis
+    maturity: medium
+    description: >
+      Ad-hoc player behaviour analysis using session and event data.
+      Used by the data science team for churn prediction modelling.
+    depends_on:
+      - ref('fct_player_sessions')
+      - ref('fct_game_events')
+      - ref('dim_players')
+    owner:
+      name: Fadi Abusafat
+      email: smartdataengineer2025@gmail.com

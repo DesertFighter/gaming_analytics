@@ -1,0 +1,5 @@
+spend_tier,min_amount,max_amount,description
+Low,0,9.99,Casual spender — occasional small purchases
+Medium,10,49.99,Regular spender — consistent engagement
+High,50,199.99,Heavy spender — core monetisation segment
+Whale,200,99999,Top spender — VIP treatment warranted

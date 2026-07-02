@@ -51,3 +51,14 @@ snapshots:
     +target_schema: snapshots
     +strategy: timestamp
     +updated_at: updated_at
+
+# =============================================================
+# TEST CONFIGURATIONS
+# =============================================================
+tests:
+  gaming_analytics:
+    +store_failures: false          # default: don't store failures globally
+    +store_failures_as: table       # when store_failures=true: persist as table not view
+    marts:
+      +store_failures: true         # override: store failures for ALL mart tests
+      +severity: error              # error = fail the run | warn = log warning but continue
