@@ -33,13 +33,17 @@ final as (
 
         -- game enrichment
         games.publisher_name,
-        games.genre_name
+        games.genre_name,
+        -- Macros
+        {{ round_usd('purchases.amount') }}       as amount_rounded,
+        {{ classify_spend('purchases.amount') }}  as spend_tier
 
     from purchases
     left join players
         on purchases.player_id = players.player_id
     left join games
         on purchases.game_id = games.game_id
+        where purchases.amount >= {{ var('min_spend_amount') }}
 )
 
 select * from final
