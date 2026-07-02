@@ -1,0 +1,135 @@
+version: 2
+
+models:
+
+  - name: fct_game_events
+    description: "Incremental game events — partitioned by DAY on occurred_at."
+    config:
+      access: protected
+    columns:
+      - name: event_id
+        tests: [unique, not_null]
+
+  - name: fct_player_sessions
+    description: "Incremental player sessions — merge upsert on session_id."
+    config:
+      access: protected
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - session_id
+              - player_id
+    columns:
+      - name: session_id
+        tests: [unique, not_null]
+      - name: player_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_players')
+                field: player_id
+
+  - name: fct_purchases
+    description: "{{ doc('fct_purchases_description') }}"
+    config:
+      access: public
+      contract:
+        enforced: true
+    columns:
+      - name: purchase_id
+        data_type: int64
+        constraints:
+          - type: not_null
+        tests: [unique, not_null]
+      - name: player_id
+        data_type: int64
+        description: "{{ doc('player_id_description') }}"
+      - name: game_id
+        data_type: int64
+      - name: currency_id
+        data_type: int64
+      - name: purchase_type
+        data_type: string
+      - name: amount
+        data_type: float64
+        description: "{{ doc('amount_description') }}"
+        tests:
+          - is_positive:
+              config:
+                store_failures: true
+      - name: is_real_money
+        data_type: bool
+      - name: is_refunded
+        data_type: bool
+      - name: platform_fee_pct
+        data_type: float64
+      - name: purchased_at
+        data_type: timestamp
+      - name: created_at
+        data_type: timestamp
+      - name: spend_tier
+        data_type: string
+      - name: spend_tier_description
+        data_type: string
+
+  - name: dim_players
+    description: "Player dimension enriched with account tier benefits."
+    latest_version: 1
+    config:
+      access: public
+      contract:
+        enforced: true
+    columns:
+      - name: player_id
+        data_type: int64
+        constraints:
+          - type: not_null
+        tests: [unique, not_null]
+      - name: username
+        data_type: string
+      - name: email
+        data_type: string
+      - name: region_id
+        data_type: int64
+      - name: account_tier
+        data_type: string
+      - name: age_group
+        data_type: string
+      - name: gender
+        data_type: string
+      - name: total_playtime_hours
+        data_type: float64
+      - name: monthly_price_usd
+        data_type: float64
+      - name: ads_free
+        data_type: bool
+      - name: priority_support
+        data_type: bool
+      - name: exclusive_content
+        data_type: bool
+      - name: max_devices
+        data_type: int64
+      - name: updated_at
+        data_type: timestamp
+    versions:
+      - v: 1
+        deprecation_date: "2026-06-31"
+        # v1 = current dim_players.sql — matches top-level columns exactly
+      - v: 2
+        # v2 = dim_players_v2.sql — adds is_high_value column
+        defined_in: dim_players_v2
+        columns:
+          - include: all
+          - name: is_high_value
+            data_type: bool
+            description: "True if player is Platinum tier. Added in v2."
+
+  - name: dim_games
+    description: "Game catalogue dimension."
+    config:
+      access: public
+    columns:
+      - name: game_id
+        tests: [unique, not_null]

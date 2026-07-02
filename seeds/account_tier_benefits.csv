@@ -1,0 +1,5 @@
+account_tier,monthly_price_usd,ads_free,priority_support,exclusive_content,max_devices
+free,0,false,false,false,1
+silver,4.99,true,false,false,2
+gold,9.99,true,true,false,3
+platinum,19.99,true,true,true,5

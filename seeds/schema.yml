@@ -1,0 +1,24 @@
+version: 2
+
+seeds:
+  - name: spend_tier_config
+    description: "Business-defined spend tier thresholds used to classify purchase amounts."
+    columns:
+      - name: spend_tier
+        description: "Tier label matching classify_spend macro output."
+        tests: [unique, not_null]
+      - name: min_amount
+        tests: [not_null]
+      - name: max_amount
+        tests: [not_null]
+      - name: description
+        tests: [not_null]
+
+  - name: account_tier_benefits
+    description: "Business-defined benefits and limits per player account tier."
+    columns:
+      - name: account_tier
+        description: "Tier label matching raw_players.account_tier values."
+        tests: [unique, not_null]
+      - name: monthly_price_usd
+        tests: [not_null]
