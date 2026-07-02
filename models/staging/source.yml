@@ -4,310 +4,389 @@ sources:
   - name: raw_gaming
     database: gaming-analytics-501111
     schema: raw_gaming
-    description: "Raw gaming data — loaded via Python generator"
-    
+    description: "Raw gaming data ingested into BigQuery from operational systems."
+
     tables:
-      - name: raw_achievement_unlocks
-        columns:
-          - name: unlock_id
-            data_type: int64
-          - name: player_id
-            data_type: int64
-          - name: achievement_id
-            data_type: int64
-          - name: unlocked_at
-            data_type: string
-          - name: time_to_unlock_hours
-            data_type: float64
-          - name: is_first_global_unlock
-            data_type: boolean
-          - name: created_at
-            data_type: string
 
-      - name: raw_achievements
-        columns:
-          - name: achievement_id
-            data_type: int64
-          - name: game_id
-            data_type: int64
-          - name: achievement_name
-            data_type: string
-          - name: achievement_type
-            data_type: string
-          - name: xp_reward
-            data_type: int64
-          - name: rarity
-            data_type: string
-          - name: unlock_rate_pct
-            data_type: float64
-          - name: created_at
-            data_type: string
-
-      - name: raw_currencies
-        columns:
-          - name: currency_id
-            data_type: int64
-          - name: currency_code
-            data_type: string
-          - name: currency_name
-            data_type: string
-          - name: symbol
-            data_type: string
-          - name: is_real_money
-            data_type: boolean
-          - name: created_at
-            data_type: string
-
-      - name: raw_devices
-        columns:
-          - name: device_id
-            data_type: int64
-          - name: device_name
-            data_type: string
-          - name: brand
-            data_type: string
-          - name: device_type
-            data_type: string
-          - name: operating_system
-            data_type: string
-          - name: created_at
-            data_type: string
-
-      - name: raw_game_events
-        columns:
-          - name: event_id
-            data_type: int64
-          - name: session_id
-            data_type: int64
-          - name: player_id
-            data_type: int64
-          - name: game_id
-            data_type: int64
-          - name: event_type
-            data_type: string
-          - name: event_value
-            data_type: float64
-          - name: xp_delta
-            data_type: int64
-          - name: coordinates_x
-            data_type: float64
-          - name: coordinates_y
-            data_type: float64
-          - name: occurred_at
-            data_type: string
-          - name: created_at
-            data_type: string
-
-      - name: raw_games
-        columns:
-          - name: game_id
-            data_type: int64
-          - name: game_name
-            data_type: string
-          - name: publisher_id
-            data_type: int64
-          - name: genre_id
-            data_type: int64
-          - name: release_date
-            data_type: string
-          - name: base_price_usd
-            data_type: float64
-          - name: is_free_to_play
-            data_type: boolean
-          - name: rating_esrb
-            data_type: string
-          - name: avg_review_score
-            data_type: float64
-          - name: total_reviews
-            data_type: int64
-          - name: created_at
-            data_type: string
-
-      - name: raw_genres
-        columns:
-          - name: genre_id
-            data_type: int64
-          - name: genre_name
-            data_type: string
-          - name: is_multiplayer_focused
-            data_type: boolean
-          - name: created_at
-            data_type: string
-
-      - name: raw_matches
-        columns:
-          - name: match_id
-            data_type: int64
-          - name: player_id
-            data_type: int64
-          - name: game_id
-            data_type: int64
-          - name: platform_id
-            data_type: int64
-          - name: match_mode
-            data_type: string
-          - name: result
-            data_type: string
-          - name: kills
-            data_type: int64
-          - name: deaths
-            data_type: int64
-          - name: assists
-            data_type: int64
-          - name: score
-            data_type: int64
-          - name: duration_minutes
-            data_type: int64
-          - name: xp_earned
-            data_type: int64
-          - name: match_start_at
-            data_type: string
-          - name: match_end_at
-            data_type: string
-          - name: created_at
-            data_type: string
-
-      - name: raw_platforms
-        columns:
-          - name: platform_id
-            data_type: int64
-          - name: platform_name
-            data_type: string
-          - name: platform_type
-            data_type: string
-          - name: manufacturer
-            data_type: string
-          - name: release_year
-            data_type: int64
-          - name: created_at
-            data_type: string
-
-      - name: raw_players
-        columns:
-          - name: player_id
-            data_type: int64
-          - name: username
-            data_type: string
-          - name: email
-            data_type: string
-          - name: region_id
-            data_type: int64
-          - name: account_tier
-            data_type: string
-          - name: age_group
-            data_type: string
-          - name: gender
-            data_type: string
-          - name: total_playtime_hours
-            data_type: float64
-          - name: lifetime_spend_usd
-            data_type: float64
-          - name: is_active
-            data_type: boolean
-          - name: account_created_at
-            data_type: string
-          - name: last_login_at
-            data_type: string
-
-      - name: raw_publishers
-        columns:
-          - name: publisher_id
-            data_type: int64
-          - name: publisher_name
-            data_type: string
-          - name: founded_year
-            data_type: int64
-          - name: country
-            data_type: string
-          - name: is_indie
-            data_type: boolean
-          - name: created_at
-            data_type: string
-
-      - name: raw_purchases
-        columns:
-          - name: purchase_id
-            data_type: int64
-          - name: player_id
-            data_type: int64
-          - name: game_id
-            data_type: int64
-          - name: purchase_type
-            data_type: string
-          - name: currency_id
-            data_type: int64
-          - name: amount
-            data_type: float64
-          - name: is_real_money
-            data_type: boolean
-          - name: is_refunded
-            data_type: boolean
-          - name: platform_fee_pct
-            data_type: float64
-          - name: purchased_at
-            data_type: string
-          - name: created_at
-            data_type: string
-
-      - name: raw_regions
-        columns:
-          - name: region_id
-            data_type: int64
-          - name: country_code
-            data_type: string
-          - name: country_name
-            data_type: string
-          - name: region
-            data_type: string
-          - name: timezone
-            data_type: string
-          - name: created_at
-            data_type: string
-
-      - name: raw_seasons
-        columns:
-          - name: season_id
-            data_type: int64
-          - name: season_name
-            data_type: string
-          - name: season_number
-            data_type: int64
-          - name: start_date
-            data_type: string
-          - name: end_date
-            data_type: string
-          - name: battle_pass_price_usd
-            data_type: float64
-          - name: created_at
-            data_type: string
+      # ─────────────────────────────────────────────────────────────
+      # EVENT TABLES — freshness checked
+      # loaded_at_field: at table level (outside config)
+      # freshness:       inside config: block  ← dbt Fusion required syntax
+      # ─────────────────────────────────────────────────────────────
 
       - name: raw_sessions
+        description: "Raw player game sessions."
+        config:
+          freshness:
+            warn_after:
+              count: 12
+              period: hour
+            error_after:
+              count: 50
+              period: hour
+          loaded_at_field: session_start_at
         columns:
           - name: session_id
-            data_type: int64
+            description: "Primary key — unique session identifier."
+            tests: [unique, not_null]
           - name: player_id
-            data_type: int64
+            description: "Foreign key to raw_players."
+            tests: [not_null]
           - name: game_id
-            data_type: int64
-          - name: platform_id
-            data_type: int64
+            description: "Foreign key to raw_games."
+            tests: [not_null]
           - name: device_id
-            data_type: int64
+            description: "Foreign key to raw_devices."
           - name: session_start_at
-            data_type: string
+            description: "Timestamp when the session started."
+            tests: [not_null]
           - name: session_end_at
-            data_type: string
-          - name: duration_minutes
-            data_type: int64
-          - name: avg_fps
-            data_type: float64
-          - name: ping_ms
-            data_type: int64
-          - name: xp_earned
-            data_type: int64
-          - name: in_game_currency_earned
-            data_type: int64
-          - name: was_multiplayer
-            data_type: boolean
+            description: "Timestamp when the session ended."
+          - name: duration_seconds
+            description: "Total session length in seconds."
+          - name: events_count
+            description: "Number of events recorded in this session."
           - name: created_at
-            data_type: string
+            description: "Row insertion timestamp."
+
+      - name: raw_game_events
+        description: "Raw in-game events fired during player sessions."
+        config:
+          freshness:
+            warn_after:
+              count: 6
+              period: hour
+            error_after:
+              count: 50
+              period: hour
+          loaded_at_field: occurred_at
+        columns:
+          - name: event_id
+            description: "Primary key — unique event identifier."
+            tests: [unique, not_null]
+          - name: session_id
+            description: "Foreign key to raw_sessions."
+            tests: [not_null]
+          - name: player_id
+            description: "Foreign key to raw_players."
+            tests: [not_null]
+          - name: game_id
+            description: "Foreign key to raw_games."
+            tests: [not_null]
+          - name: event_type
+            description: "Category of the event (e.g. gameplay, ui, system)."
+          - name: event_name
+            description: "Specific event name."
+          - name: occurred_at
+            description: "Timestamp when the event occurred."
+            tests: [not_null]
+          - name: event_payload
+            description: "JSON payload with event metadata."
+          - name: created_at
+            description: "Row insertion timestamp."
+
+      - name: raw_purchases
+        description: "Raw in-game and real-money purchase transactions."
+        config:
+          freshness:
+            warn_after:
+              count: 12
+              period: hour
+            error_after:
+              count: 50
+              period: hour
+          loaded_at_field: purchased_at
+        columns:
+          - name: purchase_id
+            description: "Primary key — unique purchase identifier."
+            tests: [unique, not_null]
+          - name: player_id
+            description: "Foreign key to raw_players."
+            tests: [not_null]
+          - name: game_id
+            description: "Foreign key to raw_games."
+            tests: [not_null]
+          - name: currency_id
+            description: "Foreign key to raw_currencies."
+          - name: purchase_type
+            description: "Type of purchase (e.g. skin, booster, season_pass)."
+          - name: amount
+            description: "Purchase amount in the transaction currency."
+          - name: is_real_money
+            description: "True if this was a real-money transaction."
+          - name: is_refunded
+            description: "True if this purchase was refunded."
+          - name: platform_fee_pct
+            description: "Platform fee percentage applied to this transaction."
+          - name: purchased_at
+            description: "Timestamp of the purchase."
+            tests: [not_null]
+          - name: created_at
+            description: "Row insertion timestamp."
+
+      - name: raw_matches
+        description: "Raw competitive match records."
+        config:
+          freshness:
+            warn_after:
+              count: 12
+              period: hour
+            error_after:
+              count: 50
+              period: hour
+          loaded_at_field: match_start_at
+        columns:
+          - name: match_id
+            description: "Primary key — unique match identifier."
+            tests: [unique, not_null]
+          - name: game_id
+            description: "Foreign key to raw_games."
+            tests: [not_null]
+          - name: session_id
+            description: "Foreign key to raw_sessions."
+          - name: player_id
+            description: "Foreign key to raw_players."
+            tests: [not_null]
+          - name: match_start_at
+            description: "Timestamp when the match started."
+            tests: [not_null]
+          - name: match_end_at
+            description: "Timestamp when the match ended."
+          - name: result
+            description: "Match outcome for this player (win / loss / draw)."
+          - name: score
+            description: "Player score in this match."
+          - name: created_at
+            description: "Row insertion timestamp."
+
+      - name: raw_achievement_unlocks
+        description: "Raw records of player achievement unlocks."
+        config:
+          freshness:
+            warn_after:
+              count: 12
+              period: hour
+            error_after:
+              count: 50
+              period: hour
+          loaded_at_field: unlocked_at
+        columns:
+          - name: unlock_id
+            description: "Primary key — unique unlock record."
+            tests: [unique, not_null]
+          - name: player_id
+            description: "Foreign key to raw_players."
+            tests: [not_null]
+          - name: achievement_id
+            description: "Foreign key to raw_achievements."
+            tests: [not_null]
+          - name: unlocked_at
+            description: "Timestamp when the achievement was unlocked."
+            tests: [not_null]
+          - name: score_at_unlock
+            description: "Player score at the moment of unlock."
+          - name: created_at
+            description: "Row insertion timestamp."
+
+      # ─────────────────────────────────────────────────────────────
+      # REFERENCE / LOOKUP TABLES — freshness disabled
+      # config: freshness: null  ← inside config block
+      # ─────────────────────────────────────────────────────────────
+
+      - name: raw_players
+        description: "Raw player profile records."
+        config:
+          freshness: null
+        columns:
+          - name: player_id
+            description: "Primary key — unique player identifier."
+            tests: [unique, not_null]
+          - name: username
+            description: "Player display name."
+            tests: [not_null]
+          - name: email
+            description: "Player email address."
+          - name: account_tier
+            description: "Subscription tier (free / silver / gold / platinum)."
+          - name: is_active
+            description: "Whether the player account is currently active."
+          - name: registered_at
+            description: "Timestamp of account registration."
+          - name: last_login_at
+            description: "Timestamp of last login."
+          - name: platform_id
+            description: "Foreign key to raw_platforms."
+          - name: region_id
+            description: "Foreign key to raw_regions."
+          - name: created_at
+            description: "Row insertion timestamp."
+
+      - name: raw_games
+        description: "Game catalogue — titles, genres, publishers."
+        config:
+          freshness: null
+        columns:
+          - name: game_id
+            description: "Primary key — unique game identifier."
+            tests: [unique, not_null]
+          - name: game_name
+            description: "Official game title."
+            tests: [not_null]
+          - name: genre_id
+            description: "Foreign key to raw_genres."
+          - name: publisher_id
+            description: "Foreign key to raw_publishers."
+          - name: release_date
+            description: "Game release date."
+          - name: rating
+            description: "Average player rating."
+          - name: created_at
+            description: "Row insertion timestamp."
+
+      - name: raw_publishers
+        description: "Game publisher reference data."
+        config:
+          freshness: null
+        columns:
+          - name: publisher_id
+            description: "Primary key — unique publisher identifier."
+            tests: [unique, not_null]
+          - name: publisher_name
+            description: "Publisher company name."
+            tests: [not_null]
+          - name: country
+            description: "Publisher home country."
+          - name: founded_year
+            description: "Year the publisher was founded."
+          - name: created_at
+            description: "Row insertion timestamp."
+
+      - name: raw_genres
+        description: "Game genre reference data."
+        config:
+          freshness: null
+        columns:
+          - name: genre_id
+            description: "Primary key — unique genre identifier."
+            tests: [unique, not_null]
+          - name: genre_name
+            description: "Genre label (e.g. RPG, FPS, Strategy)."
+            tests: [not_null]
+          - name: created_at
+            description: "Row insertion timestamp."
+
+      - name: raw_platforms
+        description: "Platform reference data (PC, console, mobile)."
+        config:
+          freshness: null
+        columns:
+          - name: platform_id
+            description: "Primary key — unique platform identifier."
+            tests: [unique, not_null]
+          - name: platform_name
+            description: "Platform name (e.g. Steam, PlayStation 5)."
+            tests: [not_null]
+          - name: platform_type
+            description: "Category — pc / console / mobile."
+          - name: created_at
+            description: "Row insertion timestamp."
+
+      - name: raw_regions
+        description: "Geographic region and country reference data."
+        config:
+          freshness: null
+        columns:
+          - name: region_id
+            description: "Primary key — unique region identifier."
+            tests: [unique, not_null]
+          - name: region_name
+            description: "Region label (e.g. EMEA, NA, APAC)."
+            tests: [not_null]
+          - name: country_name
+            description: "Full country name."
+          - name: timezone
+            description: "Primary timezone for this region."
+          - name: created_at
+            description: "Row insertion timestamp."
+
+      - name: raw_currencies
+        description: "Currency reference data."
+        config:
+          freshness: null
+        columns:
+          - name: currency_id
+            description: "Primary key — unique currency identifier."
+            tests: [unique, not_null]
+          - name: currency_code
+            description: "ISO 4217 currency code (e.g. USD, EUR)."
+            tests: [not_null]
+          - name: currency_name
+            description: "Full currency name."
+          - name: symbol
+            description: "Currency symbol."
+          - name: is_real_money
+            description: "True if this is a real fiat currency (vs. in-game currency)."
+          - name: created_at
+            description: "Row insertion timestamp."
+
+      - name: raw_devices
+        description: "Device type reference data."
+        config:
+          freshness: null
+        columns:
+          - name: device_id
+            description: "Primary key — unique device identifier."
+            tests: [unique, not_null]
+          - name: device_type
+            description: "Device category (desktop / console / mobile / tablet)."
+          - name: manufacturer
+            description: "Device manufacturer name."
+          - name: os_name
+            description: "Operating system name."
+          - name: screen_size_category
+            description: "Screen size bucket (small / medium / large)."
+          - name: created_at
+            description: "Row insertion timestamp."
+
+      - name: raw_achievements
+        description: "Achievement definitions per game."
+        config:
+          freshness: null
+        columns:
+          - name: achievement_id
+            description: "Primary key — unique achievement identifier."
+            tests: [unique, not_null]
+          - name: game_id
+            description: "Foreign key to raw_games."
+            tests: [not_null]
+          - name: achievement_name
+            description: "Achievement display name."
+            tests: [not_null]
+          - name: achievement_type
+            description: "Achievement category (e.g. combat, exploration, social)."
+          - name: points_reward
+            description: "Points awarded upon unlock."
+          - name: created_at
+            description: "Row insertion timestamp."
+
+      - name: raw_seasons
+        description: "Game season / battle-pass reference data."
+        config:
+          freshness: null
+        columns:
+          - name: season_id
+            description: "Primary key — unique season identifier."
+            tests: [unique, not_null]
+          - name: game_id
+            description: "Foreign key to raw_games."
+            tests: [not_null]
+          - name: season_name
+            description: "Season display name."
+          - name: season_number
+            description: "Ordinal season number within the game."
+          - name: started_at
+            description: "Season start timestamp."
+          - name: ended_at
+            description: "Season end timestamp."
+          - name: created_at
+            description: "Row insertion timestamp."

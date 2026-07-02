@@ -12,7 +12,11 @@ models:
       - name: username
         tests: [not_null]
       - name: region
-        tests: [not_null]
+        tests:
+          - not_null:
+              config:
+                warn_if:  ">= 1"
+                error_if: ">= 20"
 
   - name: int_games_enriched
     description: "Games enriched with publisher_name and genre_name."
@@ -22,9 +26,17 @@ models:
       - name: game_id
         tests: [unique, not_null]
       - name: publisher_name
-        tests: [not_null]
+        tests:
+          - not_null:
+              config:
+                warn_if:  ">= 1"
+                error_if: ">= 10"
       - name: genre_name
-        tests: [not_null]
+        tests:
+          - not_null:
+              config:
+                warn_if:  ">= 1"
+                error_if: ">= 10"
 
   - name: int_purchases_enriched
     description: "Purchases enriched with player and game context."
@@ -33,12 +45,21 @@ models:
         tests: [unique, not_null]
       - name: purchase_id
         tests: [unique, not_null]
+      - name: amount
+        tests:
+          - not_null:
+              config:
+                warn_if:  ">= 1"
+                error_if: ">= 50"
       - name: spend_tier
         tests:
           - not_null
           - accepted_values:
               arguments:
                 values: ['Low', 'Medium', 'High', 'Whale']
+              config:
+                warn_if:  ">= 1"
+                error_if: ">= 10"
 
   - name: int_sessions_enriched
     description: "Sessions enriched with player and game context."
@@ -64,4 +85,8 @@ models:
       - name: match_id
         tests: [unique, not_null]
       - name: publisher_name
-        tests: [not_null]
+        tests:
+          - not_null:
+              config:
+                warn_if:  ">= 1"
+                error_if: ">= 10"
