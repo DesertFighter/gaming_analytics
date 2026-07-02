@@ -1,3 +1,5 @@
+vars:
+  min_spend_amount: 10
 name: 'gaming_analytics'
 version: '1.0.0'
 config-version: 2
@@ -27,6 +29,9 @@ models:
     intermediate:
       +materialized: view
       +schema: intermediate
+      +tags: ['intermediate']
+      +pre-hook:  "{{ log('[PRE]  Building: ' ~ this, info=true) }}"
+      +post-hook: "{{ log('[POST] Finished: ' ~ this, info=true) }}"
     marts:
       +materialized: table
       +schema: marts
