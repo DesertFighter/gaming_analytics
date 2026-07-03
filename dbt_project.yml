@@ -19,6 +19,12 @@ clean-targets:
   - "dbt_packages"
 
 # =============================================================
+# ENVIRONMENT DIAGNOSTICS - Topic 2 (Branch 2: feature/cicd-deployment)
+# =============================================================
+on-run-start:
+  - "{{ log('Running in dbt Cloud environment type: ' ~ env_var('DBT_CLOUD_ENVIRONMENT_TYPE', 'unknown'), info=True) }}"
+
+# =============================================================
 # MODEL CONFIGURATIONS - Medallion Architecture
 # =============================================================
 models:
