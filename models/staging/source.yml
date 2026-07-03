@@ -299,15 +299,19 @@ sources:
           - name: region_id
             description: "Primary key — unique region identifier."
             tests: [unique, not_null]
-          - name: region_name
-            description: "Region label (e.g. EMEA, NA, APAC)."
-            tests: [not_null]
+          - name: country_code
+            description: "ISO country code."
           - name: country_name
             description: "Full country name."
+          - name: region
+            description: "Region label (e.g. EMEA, NA, APAC)."
+            tests: [not_null]
           - name: timezone
             description: "Primary timezone for this region."
           - name: created_at
             description: "Row insertion timestamp."
+          - name: updated_at
+            description: "Row last-updated timestamp."
 
       - name: raw_currencies
         description: "Currency reference data."
@@ -377,16 +381,17 @@ sources:
           - name: season_id
             description: "Primary key — unique season identifier."
             tests: [unique, not_null]
-          - name: game_id
-            description: "Foreign key to raw_games."
-            tests: [not_null]
           - name: season_name
             description: "Season display name."
           - name: season_number
-            description: "Ordinal season number within the game."
-          - name: started_at
-            description: "Season start timestamp."
-          - name: ended_at
-            description: "Season end timestamp."
+            description: "Ordinal season number."
+          - name: start_date
+            description: "Season start date."
+          - name: end_date
+            description: "Season end date."
+          - name: battle_pass_price_usd
+            description: "Price of the season's battle pass in USD."
           - name: created_at
             description: "Row insertion timestamp."
+          - name: updated_at
+            description: "Row last-updated timestamp."

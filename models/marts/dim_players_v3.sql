@@ -16,7 +16,7 @@ select
     b.priority_support,
     b.exclusive_content,
     b.max_devices,
-    p.updated_at
+    p.updated_at,
     -- NEW in v2: high-value player flag
     case
         when p.account_tier = 'Platinum' then true
