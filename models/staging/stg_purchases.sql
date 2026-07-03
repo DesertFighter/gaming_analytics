@@ -1,3 +1,4 @@
+-- CI test 2: proving state:modified+ selection while PR is still open
 with source as (
     select * from {{ source('raw_gaming', 'raw_purchases') }}
 ),
