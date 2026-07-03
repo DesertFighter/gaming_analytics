@@ -1,3 +1,4 @@
+-- CI test: proving state:modified+ only rebuilds this model + its downstream dependents
 with source as (
     select * from {{ source('raw_gaming', 'raw_players') }}
 ),
