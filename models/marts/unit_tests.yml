@@ -1,0 +1,54 @@
+unit_tests:
+
+  - name: test_is_high_value_flag
+    description: "DIAGNOSTIC VERSION - row 1 is deliberately wrong to check if Fusion actually validates is_high_value on v2."
+    model: dim_players
+    versions:
+      include:
+        - 2
+    given:
+      - input: source('raw_gaming', 'raw_players')
+        rows:
+          - {player_id: 1, account_tier: Platinum}
+          - {player_id: 2, account_tier: Gold}
+          - {player_id: 3, account_tier: Silver}
+          - {player_id: 4, account_tier: Free}
+          - {player_id: 5, account_tier: null}
+      - input: ref('account_tier_benefits')
+        rows:
+          - {account_tier: Platinum, monthly_price_usd: 19.99}
+          - {account_tier: Gold, monthly_price_usd: 9.99}
+          - {account_tier: Silver, monthly_price_usd: 4.99}
+          - {account_tier: Free, monthly_price_usd: 0}
+    expect:
+      rows:
+        - {player_id: 1, is_high_value: true}
+        - {player_id: 2, is_high_value: false}
+        - {player_id: 3, is_high_value: false}
+        - {player_id: 4, is_high_value: false}
+        - {player_id: 5, is_high_value: false}
+
+  - name: test_spend_tier_assignment
+    description: "Purchases should be assigned the correct spend_tier band based on amount, interior (non-boundary) values."
+    model: fct_purchases
+    given:
+      - input: source('raw_gaming', 'raw_purchases')
+        rows:
+          - {purchase_id: 1, amount: 0.00}
+          - {purchase_id: 2, amount: 5.00}
+          - {purchase_id: 3, amount: 25.00}
+          - {purchase_id: 4, amount: 100.00}
+          - {purchase_id: 5, amount: 500.00}
+      - input: ref('spend_tier_config')
+        rows:
+          - {spend_tier: Low, min_amount: 0, max_amount: 9.99}
+          - {spend_tier: Medium, min_amount: 10, max_amount: 49.99}
+          - {spend_tier: High, min_amount: 50, max_amount: 199.99}
+          - {spend_tier: Whale, min_amount: 200, max_amount: 99999}
+    expect:
+      rows:
+        - {purchase_id: 1, spend_tier: Low}
+        - {purchase_id: 2, spend_tier: Low}
+        - {purchase_id: 3, spend_tier: Medium}
+        - {purchase_id: 4, spend_tier: High}
+        - {purchase_id: 5, spend_tier: Whale}

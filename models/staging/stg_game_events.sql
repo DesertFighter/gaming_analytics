@@ -1,5 +1,9 @@
 with source as (
     select * from {{ source('raw_gaming', 'raw_game_events') }}
+
+    {% if target.name != 'prod' %}
+    where occurred_at >= timestamp_sub(current_timestamp(), interval 30 day)
+    {% endif %}
 ),
 renamed as (
     select
